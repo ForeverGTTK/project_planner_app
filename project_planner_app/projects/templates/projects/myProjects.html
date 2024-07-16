@@ -3,8 +3,12 @@
 {% block content %}
 
 <h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
 
-<p>Use this area to provide additional information.</p>
+<ul>
+    {% for project in projects_list %}
+        {{ project|safe }}
+    {% endfor %}
+</ul>
+<p>TBD.</p>
 
 {% endblock %}

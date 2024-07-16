@@ -5,6 +5,8 @@ Definition of views.
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
+from .models import Projects
+
 
 def home(request):
     """Renders the home page."""
@@ -30,12 +32,13 @@ def contact(request):
 def myProjects(request):
     """Renders the myProjects page."""
     assert isinstance(request, HttpRequest)
+    projects_list = Projects.objects.all()
     return render(
         request,
         'projects/myProjects.html',
         {
             'title':'My projects',
-            'message':'here goes the list of projects',
+            'projects_list':projects_list,
             'year':datetime.now().year,
         }
     )

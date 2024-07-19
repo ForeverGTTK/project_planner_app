@@ -85,7 +85,13 @@ DATABASES = {
     }
 }
 SCHEMA_GRAPH_VISIBLE = True
+SCHEMA_VIEWER = {
 
+    'exclude': {
+        'contrib':['admin','contenttypes','sessions'],
+        'auth': ['AbstractBaseUser','AbstractUser','PremissionsMixin'],
+    },
+}
 GRAPH_MODELS = {
     'all_applications': True,
     'group_models': True,

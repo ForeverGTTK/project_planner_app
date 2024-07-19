@@ -18,10 +18,17 @@ class Schema(object):
     one_to_ones = attrib()
 
 
-def get_app_models():
+def get_app_models(project):
     for app in apps.get_app_configs():
-        for model in app.get_models():
-            yield app, model
+        if project is not None:
+            for item in project:
+                if app.label == item:
+                    for model in app.get_models():
+                        yield app,model
+        else:            
+            for model in app.get_models():
+            
+                yield app, model
 
 
 def get_model_id(model):
@@ -78,7 +85,7 @@ def is_model_subclass(obj):
     return issubclass(obj, models.Model)
 
 
-def get_schema():
+def get_schema(project =None):
     abstract_nodes = defaultdict(set)
     nodes = defaultdict(tuple)
     foreign_keys = []
@@ -87,7 +94,7 @@ def get_schema():
     inheritance = set()
     proxy = []
 
-    for app, model in get_app_models():
+    for app, model in get_app_models(project):
         app_label, model_name = model_id = get_model_id(model)
         nodes[app_label] += (model_name,)
 

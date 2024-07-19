@@ -28,8 +28,9 @@ class Schema(TemplateView):
             raise Http404()
         return super().dispatch(request)
 
-    def get_context_data(self, **kwargs):
-        schema = get_schema()
+
+    def get_context_data(self,project:list[str]=None, **kwargs):
+        schema = get_schema(['projects'])
         kwargs.update(
             {
                 "abstract_models": json.dumps(schema.abstract_models),

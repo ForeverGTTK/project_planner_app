@@ -44,6 +44,9 @@
     <Compile Include="projects\apps.py" />
     <Compile Include="projects\forms.py" />
     <Compile Include="projects\models.py" />
+    <Compile Include="projects\schema_graph\schema.py" />
+    <Compile Include="projects\schema_graph\views.py" />
+    <Compile Include="projects\schema_graph\__init__.py" />
     <Compile Include="projects\tests.py" />
     <Compile Include="projects\urls.py" />
     <Compile Include="projects\views.py" />
@@ -63,6 +66,12 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="projects\schema_graph\" />
+    <Folder Include="projects\schema_graph\static\" />
+    <Folder Include="projects\static\schema_graph\" />
+    <Folder Include="projects\schema_graph\templates\" />
+    <Folder Include="projects\schema_graph\templates\schema_graph\" />
+    <Folder Include="projects\schema_graph\__pycache__\" />
     <Folder Include="projects\static\" />
     <Folder Include="projects\static\projects\" />
     <Folder Include="projects\static\projects\content\" />
@@ -74,6 +83,12 @@
     <Folder Include="projects\templates\projects\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="projects\static\schema_graph\.empty-file" />
+    <Content Include="projects\static\schema_graph\main.js" />
+    <Content Include="projects\schema_graph\templates\schema_graph\schema.html" />
+    <Content Include="projects\schema_graph\__pycache__\schema.cpython-39.pyc" />
+    <Content Include="projects\schema_graph\__pycache__\views.cpython-39.pyc" />
+    <Content Include="projects\schema_graph\__pycache__\__init__.cpython-39.pyc" />
     <Content Include="projects\static\projects\content\bootstrap.css" />
     <Content Include="projects\static\projects\content\bootstrap.min.css" />
     <Content Include="projects\static\projects\content\site.css" />
@@ -81,6 +96,7 @@
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="projects\templates\projects\editor.html" />
     <Content Include="projects\templates\projects\guy.html" />
     <Content Include="projects\templates\projects\about.html" />
     <Content Include="projects\templates\projects\contact.html" />
@@ -89,6 +105,7 @@
     <Content Include="projects\templates\projects\login.html" />
     <Content Include="projects\templates\projects\loginpartial.html" />
     <Content Include="projects\templates\projects\myProjects.html" />
+    <Content Include="ReadMe.txt" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

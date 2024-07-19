@@ -9,9 +9,9 @@ class Projects(models.Model):
     #host
     #topic
     
-    projectID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    project_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     project_name = models.TextField(null=True,blank=True)
-    owner_id = models.ForeignKey(User , on_delete=models.SET_NULL, null=True)
+    owner_ID = models.ForeignKey(User , on_delete=models.SET_NULL, null=True)
     public =  models.BinaryField()
     creation = models.DateTimeField(auto_now_add=True)
     last_updated =  models.DateTimeField(auto_now=True)
@@ -21,16 +21,17 @@ class Projects(models.Model):
 
 class data_container(models.Model):
     
-    container_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
-    projectID = models.ForeignKey(Projects , on_delete=models.CASCADE, null=True)
-    itemx = models.IntegerField()
-    itemy = models.IntegerField()
+    container_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    project_ID = models.ForeignKey(Projects , on_delete=models.CASCADE, null=True)
+    item_x = models.IntegerField()
+    item_y = models.IntegerField()
 
 class data_items(models.Model):
     
     item_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
-    item_name = models.ForeignKey(data_container , on_delete=models.CASCADE, null=True)
-    item_description = models.TextField()
+    container = models.ForeignKey(data_container , on_delete=models.CASCADE, null=True)
+    item_name = models.TextField(null=True)
+    item_description = models.TextField(null=True)
     message = models.CharField(max_length=255)
     
 class container_relation(models.Model):

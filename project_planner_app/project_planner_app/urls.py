@@ -8,12 +8,14 @@ from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from app import forms, views as app_views  # Import views from 'app' with an alias
 from projects import views as projects_views  # Import views from 'polls' with an alias
+#from schema_graph.views import Schema
 
 urlpatterns = [
     path('', projects_views.home, name='home'),  # Use 'app_views' for views from 'app'
     path('contact/', projects_views.contact, name='contact'),
     path('about/', projects_views.about, name='about'),
-    path('myProjects/', projects_views.myProjects, name='myProjects'),    
+    path('myProjects/', projects_views.myProjects, name='myProjects'),
+    path('editor/', include( 'projects.urls')),
     path('login/',
          LoginView.as_view(
              template_name='app/login.html',
@@ -26,5 +28,6 @@ urlpatterns = [
          name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
-    path('projects/', include('projects.urls')),  # Include the 'polls' app URLs
+    path('projects/', include('projects.urls')),
+    path('schema/', include('projects.urls')),
 ]

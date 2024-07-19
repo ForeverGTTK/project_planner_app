@@ -6,9 +6,11 @@
 
 <ul>
     {% for project in projects_list %}
-        {{ project|safe }}
+    {{ project|safe }}
+    <p><a href="/editor/{{project.project_ID}}" class="btn btn-primary btn-large">edit project &raquo;</a></p>
     {% endfor %}
 </ul>
 <p>TBD.</p>
+
 
 {% endblock %}

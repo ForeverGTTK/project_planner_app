@@ -1,0 +1,18 @@
+{% extends "projects/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+
+<ul>
+    <p>{{project_name}}</p>
+
+    {% for item in container_list %}
+    
+    <p>{{item}}</p>
+    {% endfor %}
+</ul>
+<p>TBD.</p>
+
+
+{% endblock %}

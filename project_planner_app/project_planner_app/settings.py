@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.staticfiles',
+    'django_extensions',
 ]
 
 # Middleware framework
@@ -83,6 +84,12 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+SCHEMA_GRAPH_VISIBLE = True
+
+GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models': True,
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

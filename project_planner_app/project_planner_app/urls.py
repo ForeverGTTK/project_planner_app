@@ -12,10 +12,7 @@ from projects import views as projects_views  # Import views from 'polls' with a
 
 urlpatterns = [
     path('', projects_views.home, name='home'),  # Use 'app_views' for views from 'app'
-    path('contact/', projects_views.contact, name='contact'),
-    path('about/', projects_views.about, name='about'),
-    path('myProjects/', projects_views.myProjects, name='myProjects'),
-    path('editor/', include( 'projects.urls')),
+    
     path('login/',
          LoginView.as_view(
              template_name='app/login.html',
@@ -28,6 +25,11 @@ urlpatterns = [
          name='login'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('admin/', admin.site.urls),
+    
     path('projects/', include('projects.urls')),
     path('schema/', include('projects.urls')),
+    path('contact/', projects_views.contact, name='contact'),
+    path('about/', projects_views.about, name='about'),
+    path('myProjects/', projects_views.myProjects, name='myProjects'),
+    path('editor/<str:pk>', projects_views.editor,name=('editor')),
 ]

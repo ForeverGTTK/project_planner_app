@@ -85,7 +85,6 @@
   <ItemGroup>
     <Content Include="projects\static\schema_graph\.empty-file" />
     <Content Include="projects\static\schema_graph\main.js" />
-    <Content Include="projects\schema_graph\templates\schema_graph\schema.html" />
     <Content Include="projects\schema_graph\__pycache__\schema.cpython-39.pyc" />
     <Content Include="projects\schema_graph\__pycache__\views.cpython-39.pyc" />
     <Content Include="projects\schema_graph\__pycache__\__init__.cpython-39.pyc" />

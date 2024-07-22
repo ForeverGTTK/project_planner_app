@@ -3,14 +3,17 @@
 {% block content %}
 
 <h2>{{ title }}.</h2>
-
-<ul>
     {% for project in projects_list %}
-    {{ project|safe }}
-    <p><a href="/editor/{{project.project_ID}}" class="btn btn-primary btn-large">edit project &raquo;</a></p>
-    {% endfor %}
-</ul>
+    
+<div class="container">
+    <h3>{{ project|safe }}</h3>
+    <ul>
+        <li> created at {{project.created_at}} </li>
+        <li> last updated {{project.last_updated}} </li>
+    </ul>
+            <a href="/editor/{{project.project_ID}}" class="btn btn-primary btn-large">edit project &raquo;</a>
+            <a href="/schema/schema/{{project.project_ID}}" class="btn btn-primary btn-large">view project build &raquo;</a>
+</div>
+ {% endfor %}
 <p>TBD.</p>
-
-
 {% endblock %}

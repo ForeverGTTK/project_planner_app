@@ -46,7 +46,12 @@ def myProjects(request):
 def editor(request,pk):
     assert isinstance(request, HttpRequest)
     try:
-        containers =data_container.objects.get(project_ID = Projects.objects.get(project_ID=pk))
+        containers = []
+        root_containers = data_container.objects.filter(project_ID = pk, is_root=True)
+        for root in root_containers:
+            containers.append(root.get_data())
+            for child in root.get_children():
+                containers.append(f'__{child.get_data}')
     except:
         containers = ['no data to show yet', 'please insert new data']
         
@@ -75,3 +80,14 @@ def about(request):
             'year':datetime.now().year,
         }
     )
+
+
+def addStep(request):
+    context = {}
+    return render(
+        request,
+        'projects/forms/addStep.html',
+        context
+        )
+
+        

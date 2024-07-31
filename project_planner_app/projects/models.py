@@ -1,3 +1,4 @@
+from email.policy import default
 from xml.parsers.expat import model
 from django.contrib.auth.models import User
 from django.db import models
@@ -5,57 +6,73 @@ from django.utils import timezone
 import uuid
 
 
+class BaseModel(models.Model):
+    
+    ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    last_updated = models.DateTimeField(auto_now=True)
+    description = models.TextField(null=True, blank=True)
 
-class Projects(models.Model):
+    class Meta:
+        abstract = True
+        
+
+class Projects(BaseModel):
 
     
-    project_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
-    project_name = models.TextField(null=True,blank=True)
-    owner_ID = models.ForeignKey(User , on_delete=models.SET_NULL, null=True)
-    public =  models.BinaryField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_updated =  models.DateTimeField(auto_now=True)
+    name = models.TextField(null=False,blank=False)
+    owner_ID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='owned_projects')
+    is_public =  models.BooleanField(default = True)
+    
     
     def __str__(self) -> str:
-        return self.project_name
+        return f'<strong>{self.name}</strong>  {self.description}'
 
-class data_container(models.Model):
+class data_container(BaseModel):
     
-    container_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
     project_ID = models.ForeignKey(Projects , on_delete=models.CASCADE, null=True)
-    container_level = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User , on_delete=models.SET_NULL, null=True)
-    last_updated =  models.DateTimeField(auto_now=True,)
-    
+    is_root =  models.BooleanField(default = True)
+    level = models.IntegerField()
+    prequisit = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name='required_by')
+   
+    def get_children(self):
+        return data_container.objects.filter(parent_relations__parent=self)
 
-class data_items(models.Model):
+    def get_data(self):
+        return data_items.objects.filter(container = self)
     
-    item_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
-    container = models.ForeignKey(data_container , on_delete=models.CASCADE, null=True)
-    container_rel = models.ManyToOneRel(container,data_container,item_ID)
-    item_name = models.TextField(null=True)
-    item_description = models.TextField(null=True)
-    message = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User , on_delete=models.SET_NULL, null=True)
-    last_updated =  models.DateTimeField(auto_now=True)
+    def clean(self):
+    # Ensure that 'prequisit' is set if 'is_root' is False
+        if not self.is_root and not self.prequisit:
+            raise ValidationError({
+                'prequisit': 'Prequisit must be set for non-root containers.'
+            })
     
-    
-class container_relation(models.Model):
-    
-    relation_ID = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, primary_key=True)
-    sender = models.ForeignKey(data_container , on_delete=models.SET_NULL, null=True ,related_name='sender')
-    receiver = models.ForeignKey(data_container , on_delete=models.SET_NULL, null=True, related_name='reciever')
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User , on_delete=models.SET_NULL, null=True)
-    last_updated =  models.DateTimeField(auto_now=True)
-    
-
-
-
     def __str__(self) -> str:
-        text = f'from {self.sender} to {self.reciver}'
+        return f'{self.get_data()}'
+
+class data_items(BaseModel):
+    
+    container = models.ForeignKey(data_container , on_delete=models.CASCADE, null=True)
+    name = models.TextField(null=True)
+    message = models.CharField(max_length=255)
+   
+    def __str__(self) -> str:
+        return self.message
+    
+    
+class container_relation(BaseModel):
+    
+   project_ID = models.ForeignKey(Projects, on_delete=models.CASCADE, null=True)
+   parent = models.ForeignKey(data_container, on_delete=models.SET_NULL, null=True, related_name='parent_relations')
+   child = models.ForeignKey(data_container, on_delete=models.SET_NULL, null=True, related_name='child_relations')
+  
+
+
+
+   def __str__(self) -> str:
+        text = f'from {self.parent} to {self.child}'
         return text
     
 

@@ -1,0 +1,16 @@
+{% extends "projects/layout.html" %}
+
+{% block content %}
+
+
+<div>
+    
+    <form method="post" action="">
+        {% csrf_token %}
+        <h2>{{ form_name }}.</h2>
+        <input type="submit" value=" Submit" />
+
+    </form>
+</div>
+
+{% endblock %}

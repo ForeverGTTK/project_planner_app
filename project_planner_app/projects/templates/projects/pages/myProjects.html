@@ -2,17 +2,17 @@
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
+<h2>{{ title }}</h2>
     {% for project in projects_list %}
     
         <div class="jumbotron">
-            <h3>{{ project|safe }}</h3>
+            <h3><strong>{{ project.name|safe }}</strong> {{project.description|safe}}</h3>
             <ul>
                 <li> created at {{project.created_at}} </li>
                 <li> last updated {{project.last_updated}} </li>
             </ul>
-                    <a href="/editor/{{project.project_ID}}" class="btn btn-primary btn-large">edit project &raquo;</a>
-                    <a href="/schema/schema/{{project.project_ID}}" class="btn btn-primary btn-large">view project build &raquo;</a>
+                    <a href="/editor/{{project.ID}}" class="btn btn-primary btn-large">edit project &raquo;</a>
+                    <a href="/schema/" class="btn btn-primary btn-large">view project build &raquo;</a>
         </div>
     {% endfor %}
 <p>TBD.</p>

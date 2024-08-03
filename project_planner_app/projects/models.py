@@ -25,22 +25,36 @@ class Projects(BaseModel):
     owner_ID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='owned_projects')
     is_public =  models.BooleanField(default = True)
     
-    
+    def get_project(self):
+        containers = data_container.objects.filter(project_ID = self)
+        relations = container_relation.get_project_relations(self)
+        return {
+            'containers': containers,
+            'relations': relations,
+            }
+
     def __str__(self) -> str:
-        return f'<strong>{self.name}</strong>  {self.description}'
+        return f'{self.name} - {self.description}'
 
 class data_container(BaseModel):
     
     project_ID = models.ForeignKey(Projects , on_delete=models.CASCADE, null=True)
     is_root =  models.BooleanField(default = True)
     level = models.IntegerField()
-    prequisit = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name='required_by')
+    prequisit = models.ForeignKey('self', on_delete=models.SET_NULL, null=True,blank=True, related_name='required_by')
    
+    def get_child_count(self):
+        return data_container.objects.filter(parent_relations__parent=self).count()
+    
     def get_children(self):
         return data_container.objects.filter(parent_relations__parent=self)
 
     def get_data(self):
-        return data_items.objects.filter(container = self)
+        items= data_items.objects.filter(container = self)
+        items_as_list = []
+        for item in items:
+            items_as_list.append(item.message)
+        return items_as_list
     
     def clean(self):
     # Ensure that 'prequisit' is set if 'is_root' is False
@@ -50,7 +64,7 @@ class data_container(BaseModel):
             })
     
     def __str__(self) -> str:
-        return f'{self.get_data()}'
+        return f'{self.description} (container level {self.level})'
 
 class data_items(BaseModel):
     
@@ -59,17 +73,37 @@ class data_items(BaseModel):
     message = models.CharField(max_length=255)
    
     def __str__(self) -> str:
-        return self.message
+        return f'{self.message}'
     
     
 class container_relation(BaseModel):
     
    project_ID = models.ForeignKey(Projects, on_delete=models.CASCADE, null=True)
-   parent = models.ForeignKey(data_container, on_delete=models.SET_NULL, null=True, related_name='parent_relations')
-   child = models.ForeignKey(data_container, on_delete=models.SET_NULL, null=True, related_name='child_relations')
+   parent = models.ForeignKey(data_container, on_delete=models.CASCADE, null=True, related_name='parent_relations')
+   child = models.ForeignKey(data_container, on_delete=models.CASCADE, null=True, related_name='child_relations')
   
+   def get_project_relations(project_ID):
+       relations = container_relation.objects.filter(project_ID=project_ID)
+       tree = {}
+
+       root_containers = data_container.objects.filter(project_ID=project_ID, is_root=True)
+       for root in root_containers:
+           container_relation.build_tree(root, tree)
+       
+       return tree
+
+   @staticmethod
+   def build_tree(container, tree, level=0):
+       if level not in tree:
+           tree[level] = 0
+       tree[level] += 1
+        
+       children = container.child_relations.all()
+       for child_relation in children:
+           container_relation.build_tree(child_relation.child, tree, level + 1)
 
 
+       
 
    def __str__(self) -> str:
         text = f'from {self.parent} to {self.child}'

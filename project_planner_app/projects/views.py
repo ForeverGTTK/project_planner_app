@@ -1,10 +1,10 @@
 """
 Definition of views.
 """
-
 from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpRequest
+from django.db.models import Count
 from .models import Projects,data_container,data_items,container_relation
 
 
@@ -13,7 +13,7 @@ def home(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'projects/guy.html'
+        'projects/pages/guy.html'
     )
 
 def contact(request):
@@ -21,7 +21,7 @@ def contact(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'projects/contact.html',
+        'projects/pages/contact.html',
         {
             'title':'Contact',
             'message':'Your contact page.',
@@ -35,7 +35,7 @@ def myProjects(request):
     projects_list = Projects.objects.all()
     return render(
         request,
-        'projects/myProjects.html',
+        'projects/pages/myProjects.html',
         {
             'title':'My projects',
             'projects_list':projects_list,
@@ -43,37 +43,45 @@ def myProjects(request):
         }
     )
 
-def editor(request,pk):
+
+def editor(request, pk):
     assert isinstance(request, HttpRequest)
     try:
-        containers = []
-        root_containers = data_container.objects.filter(project_ID = pk, is_root=True)
-        for root in root_containers:
-            containers.append(root.get_data())
-            for child in root.get_children():
-                containers.append(f'__{child.get_data}')
-    except:
-        containers = ['no data to show yet', 'please insert new data']
+        project = Projects.objects.get(ID=pk)
+        containers = data_container.objects.filter(project_ID=project)
+        relations = container_relation.objects.filter(project_ID=project)
         
+        # Annotate containers with the number of children
+        containers = containers.annotate(child_count=Count('child_relations'))
+
+        # Build level dictionary
+        level_dict = {}
+        for container in containers:
+            level_dict.setdefault(container.level, []).append(container)
+        
+    except Exception as e:
+        containers = []
+        relations = []
+        level_dict = {}
+        print(f'Error: {e}')
 
     return render(
         request,
-        'projects/editor.html',
+        'projects/pages/editor.html',
         {
-            'title':'My project editor',
-            'project_name' : Projects.objects.get(project_ID=pk),
-            'container_list': containers,
+            'title': 'Project Editor',
+            'project': project,
+            'level_dict': level_dict,
             'year': datetime.now().year,
         }
     )
-
 
 def about(request):
     """Renders the about page."""
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'projects/about.html',
+        'projects/pages/about.html',
         {
             'title':'About',
             'message':'Your application description page.',
@@ -83,10 +91,11 @@ def about(request):
 
 
 def addStep(request):
+    
     context = {}
     return render(
         request,
-        'projects/forms/addStep.html',
+        'projects/pages/forms/addStep.html',
         context
         )
 

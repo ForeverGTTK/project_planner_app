@@ -4022,7 +4022,33 @@ textarea.input-group-sm > .input-group-btn > .btn {
   border-top-left-radius: 0;
 }
 
-.navbar {
+/*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+.level-row {
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.level-container {
+    width: 100%;
+    
+}
+.container-item {
+    min-width: 150px;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transition for shadow and scale */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+    /* Shadow effect on hover */
+    .container-item:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Shadow effect */
+        transform: scale(1.05); /* Slightly scale up the item */
+    }
+
+    /*-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+    .navbar {
   position: relative;
   z-index: 1000;
   min-height: 50px;

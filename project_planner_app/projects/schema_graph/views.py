@@ -9,7 +9,6 @@ from projects.schema_graph.schema import get_schema
 
 class Schema(TemplateView):
     template_name = "projects/schema.html"
-    project_scope = ['projects']
     def access_permitted(self):
         """
         When this returns True, the schema graph page is accessible.
@@ -21,19 +20,19 @@ class Schema(TemplateView):
         """
 
         return True
-    #getattr(settings, "SCHEMA_GRAPH_VISIBLE", settings.DEBUG)
+    getattr(settings, "SCHEMA_GRAPH_VISIBLE", settings.DEBUG)
+    getattr(settings, "SCHEMA_VIEWER", settings.DEBUG)
+
 
     def dispatch(self, request):
         if not self.access_permitted():
             raise Http404()
         return super().dispatch(request)
 
-    def get_project(self, project=None):
-        self.project_scope = project
-        return self.as_view()
+ 
 
     def get_context_data(self, **kwargs):
-        schema = get_schema(self.project_scope)
+        schema = get_schema()
         kwargs.update(
             {
                 "abstract_models": json.dumps(schema.abstract_models),

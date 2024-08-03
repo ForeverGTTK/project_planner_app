@@ -76,7 +76,7 @@
     <Folder Include="projects\static\projects\" />
     <Folder Include="projects\static\projects\content\" />
     <Folder Include="projects\static\projects\fonts\" />
-    <Folder Include="projects\templates\projects\forms\" />
+    <Folder Include="projects\templates\projects\pages\" />
     <Folder Include="project_planner_app\" />
     <Folder Include="projects\" />
     <Folder Include="projects\migrations\" />
@@ -96,16 +96,8 @@
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="projects\templates\projects\editor.html" />
-    <Content Include="projects\templates\projects\forms\addStep.html" />
-    <Content Include="projects\templates\projects\guy.html" />
-    <Content Include="projects\templates\projects\about.html" />
-    <Content Include="projects\templates\projects\contact.html" />
     <Content Include="projects\templates\projects\index.html" />
     <Content Include="projects\templates\projects\layout.html" />
-    <Content Include="projects\templates\projects\login.html" />
-    <Content Include="projects\templates\projects\loginpartial.html" />
-    <Content Include="projects\templates\projects\myProjects.html" />
     <Content Include="ReadMe.txt" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />

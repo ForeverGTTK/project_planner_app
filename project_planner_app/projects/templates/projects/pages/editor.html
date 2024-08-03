@@ -1,0 +1,28 @@
+{% extends "projects/layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+<div class="jumbotron">
+    <h3><strong>{{ project.name|safe }}</strong> {{ project.description|safe }}</h3>
+
+    {% for level, containers in level_dict.items %}
+    <div class="level-row">
+        <h4>Level {{ level }}</h4>
+        <table class="table level-container">
+            <tr>
+                {% for container in containers %}
+                <td class="container-item ">
+                    <strong>{{ container.description|safe }}</strong> (Level {{ container.level }})
+                    <p>Children count: {{ container.child_count }}</p>
+                    <a href="/addStep/" class="btn btn-primary btn-large">add a container &raquo;</a>
+                </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -8,7 +8,7 @@ from projects.schema_graph.schema import get_schema
 
 
 class Schema(TemplateView):
-    template_name = "projects/schema.html"
+    template_name = "projects/pages/schema.html"
     def access_permitted(self):
         """
         When this returns True, the schema graph page is accessible.

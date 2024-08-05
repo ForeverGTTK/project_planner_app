@@ -1,25 +1,18 @@
 {% if user.is_authenticated %}
-<form id="logoutForm" action="/logout/" method="post" class="navbar-right">
+<form id="logoutForm" action="/logout/" method="post" class="form-inline ml-auto">
     {% csrf_token %}
-    <ul class="nav navbar-nav navbar-right">
-        <li><span class="navbar-brand">Hello {{ user.username }}!</span></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-    </ul>
-
+    <span class="navbar-text mr-3">Hello {{ user.username }}!</span>
+    <button type="submit" class="btn nav-link btn-link">Log off</button>
 </form>
-<div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav">
-        <li><a href="{% url 'myProjects' %}">My Projects</a></li>
-        <li><a href="{% url 'schema' %}">schema</a></li>
+   
 
-
-    </ul>
-</div>
 
 {% else %}
 
-<ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'login' %}">Log in</a></li>
+<ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}">Log in</a>
+    </li>
 </ul>
 
 {% endif %}

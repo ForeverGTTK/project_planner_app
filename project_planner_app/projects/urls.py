@@ -8,6 +8,6 @@ urlpatterns =[
     path('', views.home, name='projects/guy'),
     path('myProjects',views.myProjects, name='projects/myProjects'),
     path('editor/<str:pk>',views.editor,name='projects/ediitor'),
-    path('addStep',views.addStep,name='projects/addStep'),
+    path('addContainer',views.addContainer,name='addContainer'),
 
     ]

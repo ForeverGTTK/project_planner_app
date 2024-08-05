@@ -77,6 +77,8 @@
     <Folder Include="projects\static\projects\content\" />
     <Folder Include="projects\static\projects\fonts\" />
     <Folder Include="projects\templates\projects\pages\" />
+    <Folder Include="projects\templates\projects\pages\forms\" />
+    <Folder Include="projects\templates\projects\pages\elements\" />
     <Folder Include="project_planner_app\" />
     <Folder Include="projects\" />
     <Folder Include="projects\migrations\" />
@@ -98,6 +100,10 @@
     <Content Include="projects\static\projects\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="projects\templates\projects\index.html" />
     <Content Include="projects\templates\projects\layout.html" />
+    <Content Include="projects\templates\projects\loggedelements.html" />
+    <Content Include="projects\templates\projects\pages\elements\modal.html" />
+    <Content Include="projects\templates\projects\pages\elements\recur_containers.html" />
+    <Content Include="projects\templates\projects\pages\forms\addContainer.html" />
     <Content Include="ReadMe.txt" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />

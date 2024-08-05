@@ -2,11 +2,12 @@
 Definition of views.
 """
 from datetime import datetime
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpRequest
 from django.db.models import Count
 from .models import Projects,data_container,data_items,container_relation
-
+from .forms import DataContainer
+from typing import Dict
 
 def home(request):
     """Renders the home page."""
@@ -42,27 +43,17 @@ def myProjects(request):
             'year':datetime.now().year,
         }
     )
-
-
 def editor(request, pk):
     assert isinstance(request, HttpRequest)
     try:
+        # Fetch the project
         project = Projects.objects.get(ID=pk)
-        containers = data_container.objects.filter(project_ID=project)
-        relations = container_relation.objects.filter(project_ID=project)
-        
-        # Annotate containers with the number of children
-        containers = containers.annotate(child_count=Count('child_relations'))
+         
+        # Get the dependency tree
+        tree = project.build_dep_tree()
 
-        # Build level dictionary
-        level_dict = {}
-        for container in containers:
-            level_dict.setdefault(container.level, []).append(container)
-        
     except Exception as e:
-        containers = []
-        relations = []
-        level_dict = {}
+        tree = {}
         print(f'Error: {e}')
 
     return render(
@@ -71,10 +62,12 @@ def editor(request, pk):
         {
             'title': 'Project Editor',
             'project': project,
-            'level_dict': level_dict,
+            'tree': tree,
             'year': datetime.now().year,
         }
     )
+
+
 
 def about(request):
     """Renders the about page."""
@@ -90,12 +83,17 @@ def about(request):
     )
 
 
-def addStep(request):
-    
-    context = {}
+def addContainer(request):
+    form = DataContainer()
+    if request.method == 'POST':
+        form = DataContainer(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('myProjects')
+    context = {'form':form}
     return render(
         request,
-        'projects/pages/forms/addStep.html',
+        'projects/pages/forms/addContainer.html',
         context
         )
 

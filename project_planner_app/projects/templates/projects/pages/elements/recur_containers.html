@@ -1,0 +1,13 @@
+<div class="container-item" style="--level: {{ level }};">
+    {% for child, sub_tree in tree.items %}
+    <div class="container-item" style="--level: {{ level }};">
+        <h5>
+            <strong>{{ forloop.counter }}</strong> {{ child }}
+            <a href="/addContainer" class="btn btn-large"> + &raquo;</a>
+        </h5>
+        {% if sub_tree %}
+        {% include 'projects/pages/elements/recur_containers.html' with tree=sub_tree level=level|add:1  %}
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>

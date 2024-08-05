@@ -1,28 +1,35 @@
 {% extends "projects/layout.html" %}
 
 {% block content %}
-
 <h2>{{ title }}</h2>
-<div class="jumbotron">
+<div>
     <h3><strong>{{ project.name|safe }}</strong> {{ project.description|safe }}</h3>
 
-    {% for level, containers in level_dict.items %}
-    <div class="level-row">
-        <h4>Level {{ level }}</h4>
-        <table class="table level-container">
-            <tr>
-                {% for container in containers %}
-                <td class="container-item ">
-                    <strong>{{ container.description|safe }}</strong> (Level {{ container.level }})
-                    <p>Children count: {{ container.child_count }}</p>
-                    <a href="/addStep/" class="btn btn-primary btn-large">add a container &raquo;</a>
-                </td>
-                {% endfor %}
-            </tr>
-        </table>
+    <div class="container-hierarchy">
+        {% for root, sub_tree in tree.items %}
+        <div class="jumbotron container-item" style="--level: {{ root.level }};">
+            <h4><strong>1</strong> {{ root }} </h4>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Open Form
+            </button>
+            {% include 'projects/pages/elements/recur_containers.html' with tree=sub_tree level=1 %}
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-
 </div>
 
+<!-- Include the modal HTML here -->
+{% include 'projects/pages/elements/modal.html' %}
+
+<style>
+    .container-hierarchy {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .container-item {
+        --level: 0;
+        margin-left: calc(var(--level) * 20px);
+    }
+</style>
 {% endblock %}

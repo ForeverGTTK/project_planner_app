@@ -8,10 +8,17 @@
     <div class="container-hierarchy">
         {% for root, sub_tree in tree.items %}
         <div class="jumbotron container-item" style="--level: {{ root.level }};">
-            <h4><strong>1</strong> {{ root }} </h4>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Open Form
-            </button>
+            <h4>
+                <strong>1</strong> {{ root }}
+                <button type="button" class="btn btn-large" data-toggle="modal" data-target="#exampleModal">
+                    edit &raquo;
+                </button>
+               
+                <button type="button" class="btn btn-large" data-toggle="modal" data-target="#exampleModal">
+                    view &raquo;
+                </button>
+            </h4>
+           
             {% include 'projects/pages/elements/recur_containers.html' with tree=sub_tree level=1 %}
         </div>
         {% endfor %}

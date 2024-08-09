@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <!-- Form -->
-                <form id="addContainerForm" method="post" action="{% url 'addContainer' %}">
+                <form id="DataContainerForm" method="post" action="{% url 'addContainer' %}">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">Submit</button>

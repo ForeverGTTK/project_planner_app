@@ -32,7 +32,7 @@ urlpatterns = [
    
     path('myProjects/', projects_views.myProjects, name='myProjects'),
     path('editor/<str:pk>', projects_views.editor,name=('editor')),
-    path('addContainer/',projects_views.addContainer,name='addContainer'),
+    path('addContainer/',projects_views.addContainer,name='addContainerForm'),
     
     path('contact/', projects_views.contact, name='contact'),
     path('about/', projects_views.about, name='about'),

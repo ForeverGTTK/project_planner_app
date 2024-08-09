@@ -1,15 +1,19 @@
 {% if user.is_authenticated %}
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'schema' %}">Schema</a>
+</li>
 <form id="logoutForm" action="/logout/" method="post" class="form-inline ml-auto">
     {% csrf_token %}
     <span class="navbar-text mr-3">Hello {{ user.username }}!</span>
     <button type="submit" class="btn nav-link btn-link">Log off</button>
 </form>
-   
+
 
 
 {% else %}
 
 <ul class="navbar-nav ml-auto">
+
     <li class="nav-item">
         <a class="nav-link" href="{% url 'login' %}">Log in</a>
     </li>

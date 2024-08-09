@@ -3,7 +3,12 @@
     <div class="container-item" style="--level: {{ level }};">
         <h5>
             <strong>{{ forloop.counter }}</strong> {{ child }}
-            <a href="/addContainer" class="btn btn-large"> + &raquo;</a>
+            <a href="/addContainer" class="btn btn-large"> edit &raquo;</a>
+            <button type="button" class="btn btn-large" onclick="location.href='{% url 'addContainerTo' project_pk=project.ID parent_pk=root.ID %}'">
+                add &raquo;
+            </button>
+            <a href="/addContainer" class="btn btn-large"> view &raquo;</a>
+
         </h5>
         {% if sub_tree %}
         {% include 'projects/pages/elements/recur_containers.html' with tree=sub_tree level=level|add:1  %}

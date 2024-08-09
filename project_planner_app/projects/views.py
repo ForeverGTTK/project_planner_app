@@ -2,11 +2,12 @@
 Definition of views.
 """
 from datetime import datetime
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.db.models import Count
 from .models import Projects,data_container,data_items,container_relation
-from .forms import DataContainer
+from .forms import DataContainerForm
 from typing import Dict
 
 def home(request):
@@ -82,19 +83,35 @@ def about(request):
         }
     )
 
+def addContainer(request, project_pk=None, parent_pk=None):
+    project = get_object_or_404(Projects, pk=project_pk)
+    parent_container = None
+    if parent_pk:
+        parent_container = get_object_or_404(data_container, pk=parent_pk)
 
-def addContainer(request):
-    form = DataContainer()
     if request.method == 'POST':
-        form = DataContainer(request.POST)
+        form = DataContainerForm(request.POST)
         if form.is_valid():
-            form.save()
+            container = form.save(commit=False)
+            container.project_ID = project
+            container.created_by = request.user
+            if parent_pk:
+                container.is_root = False
+            container.level = parent_container.level + 1 if parent_container else 0
+            container.save()
+            if parent_container:
+                container_relation.objects.create(
+                    project_ID=project,
+                    parent=parent_container,
+                    child=container
+                )
             return redirect('myProjects')
-    context = {'form':form}
-    return render(
-        request,
-        'projects/pages/forms/addContainer.html',
-        context
-        )
+    else:
+        form = DataContainerForm()
 
-        
+    context = {
+        'form': form,
+        'project': project,
+        'parent_container': parent_container,
+    }
+    return render(request, 'projects/pages/forms/addContainer.html', context)

@@ -1,0 +1,29 @@
+{% extends "projects/layout.html" %}
+{% block sidebar %}
+    <h3>
+        Create new project
+    </h3>
+    
+    <p>
+        insert the name of the project and the description<br>
+        you can uncheck the public box if yu'd like<br><br>
+        you could always alter the information<br>
+    </p>
+
+
+{% endblock %}
+
+{% block content %}
+
+
+<div>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <h2>{{ form.as_p }}</h2>
+        <input type="submit" value=" Submit" />
+
+    </form>
+</div>
+
+{% endblock %}

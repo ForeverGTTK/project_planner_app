@@ -9,13 +9,15 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Form -->
-                <form id="DataContainerForm" method="post" action="{% url 'addContainer' %}">
+                {% if parent_container%}
+                <form method="post" action="{% url 'addContainerTo' project_pk=project.ID parent_pk=parent_container.ID %}">
+                {% else %}
+                    <form method="post" action="{% url 'addRootContainer' project_pk=project.ID %}">
+                {% endif %}
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="submit" value="Submit" class="btn btn-primary" />
                 </form>
-                <div id="formErrors" class="mt-2"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

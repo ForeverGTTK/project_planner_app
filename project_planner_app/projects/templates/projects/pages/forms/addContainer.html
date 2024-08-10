@@ -1,10 +1,35 @@
 {% extends "projects/layout.html" %}
 
+
+{% block sidebar %}
+<h2>
+    <strong>{{project }}</strong>
+    <br<br<br>adding a node to-<br>
+</h2>
+    {%if parent_container%}
+       <h4>
+          {{parent_container}}
+       </h4>
+    {% else %}
+        <h4>
+            New Root container
+        </h4>
+    {% endif %}
+
+
+    <p>
+        insert the description of the container<br>
+        add a prequsit node if needed <br>
+        you could always alter the information<br>
+    </p>
+
+
+{% endblock %}
+
 {% block content %}
 
-
 <div>
-    
+
     <form method="post" action="">
         {% csrf_token %}
         <h2>{{ form.as_p }}</h2>

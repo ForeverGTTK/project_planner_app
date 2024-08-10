@@ -18,11 +18,22 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
  
+class newProjectForm(forms.ModelForm):
+    class Meta:
+        model = Projects
+        fields =['name','description','is_public']
+
 class DataContainerForm(forms.ModelForm):
     class Meta:
         model = data_container
         fields = '__all__'
         exclude = ['created_by','project_ID','level','is_root']
+        
+    def __init__(self, *args, **kwargs):
+        project = kwargs.pop('project', None)
+        super(DataContainerForm, self).__init__(*args, **kwargs)
+        if project:
+            self.fields['prequisit'].queryset = data_container.objects.filter(project_ID=project)
 """
 class BookForm(forms.Form):
 

@@ -1,19 +1,29 @@
 {% extends "projects/layout.html" %}
 
+{% block sidebar %}
+<h2>
+    Create new project<br />
+
+    <button type="button" class="btn btn-secondary " onclick="location.href='{% url 'addProject' %}'">
+        Click Here!
+    </button>
+</h2>
+
+{% endblock %}
 {% block content %}
 
 <h2>{{ title }}</h2>
     {% for project in projects_list %}
-    
-        <div class="jumbotron">
-            <h3><strong>{{ project.name|safe }}</strong> {{project.description|safe}}</h3>
-            <ul>
-                <li> created at {{project.created_at}} </li>
-                <li> last updated {{project.last_updated}} </li>
-            </ul>
-                    <a href="/editor/{{project.ID}}" class="btn btn-primary btn-large">edit project &raquo;</a>
-                    <a href="/schema/" class="btn btn-primary btn-large">view project build &raquo;</a>
-        </div>
+
+<div class="jumbotron">
+    <h3><strong>{{ project.name|safe }}</strong> {{project.description|safe}}</h3>
+    <ul>
+        <li> created at {{project.created_at}} </li>
+        <li> last updated {{project.last_updated}} </li>
+    </ul>
+    <a href="/editor/{{project.ID}}" class="btn btn-primary btn-large">edit project &raquo;</a>
+    <a href="/schema/" class="btn btn-primary btn-large">view project build &raquo;</a>
+</div>
     {% endfor %}
 <p>TBD.</p>
 {% endblock %}

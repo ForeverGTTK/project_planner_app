@@ -4,7 +4,7 @@
         <h5>
             <strong>{{ forloop.counter }}</strong> {{ child }}
             <a href="/addContainer" class="btn btn-large"> edit &raquo;</a>
-            <button type="button" class="btn btn-large" onclick="location.href='{% url 'addContainerTo' project_pk=project.ID parent_pk=root.ID %}'">
+            <button type="button" class="btn btn-large" onclick="location.href='{% url 'addContainerTo' project_pk=project.ID parent_pk=child.ID %}'">
                 add &raquo;
             </button>
             <a href="/addContainer" class="btn btn-large"> view &raquo;</a>

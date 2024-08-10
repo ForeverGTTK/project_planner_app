@@ -9,13 +9,32 @@
 </head>
 
 <body>
+    <style>
+        .sidbar-container {
+            display: grid;
+            grid-template-columns: 2fr 7fr 1fr;
+            column-gap: 10px;
+        }
+        .centered-div {
+            position: fixed; /* Keeps the div in a fixed position relative to the viewport */
+            top: 10%; /* Sets the div's top position at 25% of the viewport height */
+            left: 0; /* Positions the div at the left of the viewport */
+            margin-left: auto; /* Centers the div horizontally in its position */
+            width: 20%; /* Sets the width of the div */
+            background-color: #fff; /* Sets the background color */
+            border: 1px solid #ccc; /* Adds a border around the div */
+            padding: 20px; /* Adds padding inside the div */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adds a shadow effect to the div */
+        }
+
+    </style>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         {% if user.is_authenticated %}
 
         <a class="navbar-brand" href="/myProjects">Project Planner</a>
@@ -42,14 +61,23 @@
 
         </div>
     </nav>
+    
+    <div class="sidbar-container">
+        <div>
+            <div class="centered-div">
+                {% block sidebar %}{% endblock %}
+            </div>
+        </div>
+        <div class=" body-content">
 
-    <div class="container body-content">
-        {% block content %}{% endblock %}
-        <hr />
-        <footer>
-            <p>&copy; {{ year }} - ForeverGTTK</p>
-        </footer>
+            {% block content %}{% endblock %}
+            <hr />
+            <footer>
+                <p>&copy; {{ year }} - ForeverGTTK</p>
+            </footer>
+        </div>
     </div>
+
 
     {% block scripts %}{% endblock %}
 </body>

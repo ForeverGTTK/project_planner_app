@@ -9,8 +9,12 @@
         {{ project.description|safe }}<br />
     </h4>
     <p>
+        Topics:
+            {% for topic in topics%}
+            <a href="/" class="btn btn-large topic-tag">{{topic}},</a>
+            {% endfor %}<br />
         Created By: {{project.created_by}}<br />
-        Created At: {{project.created_at}}
+        Created At: {{project.created_at}}<br />
     </p>
 
 
@@ -28,20 +32,20 @@
     <div class="container-hierarchy">
         {% for root, sub_tree in tree.items %}
         <div class="jumbotron container-item" style="--level: {{ root.level }};">
-            <h4>
+            <h5>
                 <strong>1</strong> {{ root }}
-                <button type="button" class="btn btn-large" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-large topic-tag" data-toggle="modal" data-target="#exampleModal">
                     edit &raquo;
                 </button>
 
-                <button type="button" class="btn btn-large" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-large topic-tag" data-toggle="modal" data-target="#exampleModal">
                     Add
                 </button>
-
-                <button type="button" class="btn btn-large" data-toggle="modal" data-target="#exampleModal">
+                                                           
+                <button type="button" class="btn btn-large topic-tag" data-toggle="modal" data-target="#exampleModal">
                     view &raquo;
                 </button>
-            </h4>
+            </h5>
 
             {% include 'projects/pages/elements/recur_containers.html' with tree=sub_tree level=1 %}
         </div>

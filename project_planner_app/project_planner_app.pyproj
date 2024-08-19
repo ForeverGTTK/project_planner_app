@@ -103,8 +103,12 @@
     <Content Include="projects\templates\projects\loggedelements.html" />
     <Content Include="projects\templates\projects\pages\elements\modal.html" />
     <Content Include="projects\templates\projects\pages\elements\recur_containers.html" />
+    <Content Include="projects\templates\projects\pages\elements\timelineRecur.html" />
+    <Content Include="projects\templates\projects\pages\exploreProjects.html" />
     <Content Include="projects\templates\projects\pages\forms\addContainer.html" />
     <Content Include="projects\templates\projects\pages\forms\addProject.html" />
+    <Content Include="projects\templates\projects\pages\projectView.html" />
+    <Content Include="projects\templates\projects\pages\user.html" />
     <Content Include="ReadMe.txt" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />

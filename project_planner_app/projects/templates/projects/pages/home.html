@@ -24,7 +24,11 @@
     <div class="col-md-4">
         <h2>Create New Project</h2>
         <p>Generate new project using your defenitions.</p>
-        <p><a class="btn btn-default" href="https://pypi.org/">New Project &raquo;</a></p>
+        <p>
+            <button type="button" class="btn btn-secondary " onclick="location.href='{% url 'addProject' %}'">
+                New Project!
+            </button>
+        </p>
     </div>
 
 </div>

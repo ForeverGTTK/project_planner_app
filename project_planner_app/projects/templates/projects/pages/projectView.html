@@ -1,0 +1,115 @@
+{% extends "projects/layout.html" %}
+
+{% block sidebar %}
+<h2><strong>{{ project.name|safe }}</strong></h2>
+<h4>{{ project.description|safe }}<br /></h4>
+<p>
+    Topics:
+        {% for topic in topics%}
+        <a href="/" class="btn btn-large topic-tag">{{topic}},</a>
+        {% endfor %}<br />
+    Created By: {{project.created_by}}<br />
+    Created At: {{project.created_at}}<br />
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <table class="timeline-table">
+        <thead>
+            <tr>
+                <th class="fixed-col" style="--col-num:1;">Task</th>
+                <th class="fixed-col" style="--col-num:2;">Prequisit</th>
+                <th class="fixed-col" style="--col-num:3;">Created By</th>
+                <th class="fixed-col" style="--col-num:4;">Created At</th>
+                <!-- Generate header for each day dynamically -->
+                {% for day in day_list %}
+                <th>Day {{ day }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for root, sub_tree in tree.items %}
+            <tr class="collapsible-header" onclick="toggleRow('row-{{root.ID|safe}}')">
+                <td class="fixed-col" style="--num:{{root.level}};">{{ root }}</td>
+                <td class="fixed-col" style="--num:1;">{{ root.prequisit }}</td>
+                <td class="fixed-col" style="--num:2;">{{ root.created_by }}</td>
+                <td class="fixed-col" style="--num:3;">{{ root.created_at }}</td>
+                <!-- Empty cells representing days -->
+                {% for day in day_list %}
+                <td class="empty-cell"></td>
+                {% endfor %}
+            </tr>
+            {% if sub_tree %}
+
+            {% include 'projects/pages/elements/timelineRecur.html' with tree=sub_tree parent=root %}
+
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .timeline-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: auto;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #ddd;
+        white-space: nowrap;
+    }
+
+    .empty-cell {
+        background-color: white;
+    }
+
+    .collapsible-row {
+        display: 'table-row';
+        background-color: #f1f1f1;
+    }
+
+    .collapsible-header {
+        cursor: pointer;
+        background-color: #f2f2f2;
+    }
+
+    .fixed-col {
+        position: sticky;
+        --num: 0;
+        left: calc(var(--num) * 2%);
+        background: grey;
+        z-index: 2;
+    }
+
+
+    .task-item {
+        --level: 0;
+        padding-block-start: calc(var(--level) * 40px);
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+</style>
+
+<script>
+    function toggleRow(rowId) {
+        var rows = document.getElementsByName(rowId);
+        rows.forEach(function (row) {
+            if (row) {
+                row.style.display = row.style.display === "none" ? "table-row" : "none";
+            }
+        });
+
+    }
+</script>
+{% endblock %}

@@ -1,43 +1,93 @@
 """
 Definition of views.
 """
-from datetime import datetime
+import os,re
+from datetime import datetime, timedelta
 from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
 from django.db.models import Count
-from .models import Projects,data_container,data_items,container_relation
-from .forms import DataContainerForm,newProjectForm
+from .models import *
+from .forms import DataContainerForm,newProjectForm,existingProjectForm
 from typing import Dict
+
+
+def retrender(request,page_address,context):
+    context.__setitem__('easterEgg',True if datetime.now().minute%2==0 else False)
+    # operations on elements to add
+    app_name = re.split(r'_|(?=[A-Z])', os.path.splitext(os.path.basename(page_address))[0])
+
+    if context['easterEgg']:
+        title = ' '.join(word.capitalize() for word in app_name)
+    else:
+        title= ' '.join(word.lower() for word in app_name)
+    
+    # appending items to page context
+    context.__setitem__('title',str(title))  
+    context.__setitem__('year',datetime.now().year)
+
+    return render(
+        request,
+        page_address,
+        context
+        )
+
 
 def home(request):
     """Renders the home page."""
     assert isinstance(request, HttpRequest)
-    return render(
+    return retrender(
         request,
-        'projects/pages/guy.html'
+        'projects/pages/home.html',
+        {}
     )
 
 
 def myProjects(request):
     """Renders the myProjects page."""
     assert isinstance(request, HttpRequest)
-    projects_list = Projects.objects.all()
-    return render(
+    projects_list = Projects.objects.filter(owner_ID= request.user)
+    topics = Topics.objects.all()
+    return retrender(
         request,
         'projects/pages/myProjects.html',
         {
-            'title':'My projects',
             'projects_list':projects_list,
-            'year':datetime.now().year,
+            'topics':topics,
         }
     )
+
+def exploreProjects(request,sort_by='Topic'):
+    """Renders the myProjects page."""
+    assert isinstance(request, HttpRequest)
+    projects_list = Projects.objects.filter(is_public= True)
+    if sort_by == 'owner_ID':
+        sorted_projects = sort_projects_by(project_list=projects_list,attr_name='owner_ID')
+    elif sort_by=='name':
+        sorted_projects = sort_projects_by(project_list=projects_list,attr_name='name')
+    elif sort_by == 'Topic':
+        sorted_projects = sort_projects_by(project_list=projects_list,attr_name='Topic')
+    else:
+        sorted_projects = sort_projects_by(project_list=projects_list)
+    topics = Topics.objects.all()
+    return retrender(
+        request,
+        'projects/pages/exploreProjects.html',
+        {
+            'projects_list':projects_list,
+            'sorted_projects':sorted_projects,
+            'sorted_by':sort_by,
+            'topics':topics,
+        }
+    )
+
 def editor(request, pk):
     assert isinstance(request, HttpRequest)
     try:
         # Fetch the project
         project = Projects.objects.get(ID=pk)
          
+        topics = Topics.get_project_topics(project_id=pk)
         # Get the dependency tree
         tree = project.build_dep_tree()
 
@@ -45,14 +95,43 @@ def editor(request, pk):
         tree = {}
         print(f'Error: {e}')
 
-    return render(
+    return retrender(
         request,
         'projects/pages/editor.html',
         {
-            'title': 'Project Editor',
             'project': project,
+            'topics':topics,
             'tree': tree,
-            'year': datetime.now().year,
+        }
+    )
+
+def projectView(request, pk):
+   assert isinstance(request, HttpRequest)
+   try:
+        # Fetch the project
+        project = Projects.objects.get(ID=pk)
+         
+        topics = Topics.get_project_topics(project_id=pk)
+
+        # Get the dependency tree
+        tree = project.build_dep_tree()
+
+        # Assuming day 0 is project created_at date, calculate day list
+        day_list = [i for i in range(1, 31)]
+
+   except Exception as e:
+        tree = {}
+        day_list = []
+        print(f'Error: {e}')
+
+   return retrender(
+        request,
+        'projects/pages/projectView.html',
+        {
+            'project': project,
+            'topics':topics,
+            'tree': tree,
+            'day_list': day_list,
         }
     )
 
@@ -76,7 +155,7 @@ def addProject(request):
         'form': form,
       
     }
-    return render(request, 'projects/pages/forms/addProject.html', context)
+    return retrender(request, 'projects/pages/forms/addProject.html', context)
 
 
 def addContainer(request, project_pk=None, parent_pk=None):
@@ -122,7 +201,44 @@ def addContainer(request, project_pk=None, parent_pk=None):
         'project': project,
         'parent_container': parent_container,
     }
-    return render(request, 'projects/pages/forms/addContainer.html', context)
+    return retrender(request, 'projects/pages/forms/addContainer.html', context)
+
+
+def updateProject(request,pk):
+    editable_project = Projects.objects.get(ID=pk)
+
+    if request.method == 'POST':
+        form = existingProjectForm(request.POST,instance=editable_project)
+        if form.is_valid():
+            project = form.save(commit=False)
+            #add operations to edit automaticly
+            project.save()
+
+            return redirect('myProjects')
+    else:
+        form = existingProjectForm(instance=editable_project)
+
+    context = {
+        'form': form,
+      
+    }
+    return retrender(request, 'projects/pages/forms/addProject.html', context)
+
+def updateContainer(request,project_pk,container_pk=None):
+    """
+    to be written
+    """
+    if container_pk ==None:
+        return addContainer(request=request,project_pk=project_pk)
+    project = get_object_or_404(Projects, pk=project_pk)
+    form = DataContainerForm(project = project)
+    container = data_container.objects.get(ID=container_pk)
+    context = {
+        'form': form,
+        'project': project,
+        'container': container,
+    }
+    return retrender(request, 'projects/pages/forms/addContainer.html', context)    
 
 #TODO dodododo !!!
 """
@@ -136,6 +252,27 @@ TODO add budget costs
 """
 
 
+def userPage(request,userName):
+    """Renders the User page."""
+    assert isinstance(request, HttpRequest)
+    selected_user=  User.objects.get(username=userName)
+    user_details= {
+        'UserName':userName,
+        'Name':selected_user.get_full_name,
+        'mail':selected_user.email,
+        'owned projects':Projects.objects.filter(owner_ID=selected_user),
+        'Registered Since':selected_user.date_joined.date
+        }
+    return render(
+        request,
+        'projects/pages/user.html',
+        {
+            'title':userName,
+            'message':user_details,
+            'year':datetime.now().year,
+        }
+    )
+    
 
 def contact(request):
     """Renders the contact page."""

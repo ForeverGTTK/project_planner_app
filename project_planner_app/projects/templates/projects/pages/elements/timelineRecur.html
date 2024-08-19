@@ -1,0 +1,16 @@
+{% for child, child_tree in tree.items %}
+<tr name="row-{{parent.ID|safe}}" class="collapsible-row  task-item sub-table" onclick="toggleRow('row-{{child.ID|safe}}')">
+    <td class="fixed-col" style="--num:{{child.level}};"><strong>{{ forloop.counter }}</strong>{{ child }}</td>
+    <td class="fixed-col" style="--num:2;">{{ child.prequisit }}</td>
+    <td class="fixed-col" style="--num:3;">{{ child.created_by }}</td>
+    <td class="fixed-col" style="--num:4;">{{ child.created_at }}</td>
+    {% for day in day_list %}
+    <td class="empty-cell"></td>
+    {% endfor %}
+
+</tr>
+{% if child_tree %}
+    {% include 'projects/pages/elements/timelineRecur.html' with tree=child_tree  parent=child %}
+{% endif %}
+{% endfor %}
+

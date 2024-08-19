@@ -3,11 +3,12 @@
     <div class="container-item" style="--level: {{ level }};">
         <h5>
             <strong>{{ forloop.counter }}</strong> {{ child }}
-            <a href="/addContainer" class="btn btn-large"> edit &raquo;</a>
-            <button type="button" class="btn btn-large" onclick="location.href='{% url 'addContainerTo' project_pk=project.ID parent_pk=child.ID %}'">
+            <a href="/updateContainer/{{project.ID}}/{{child.ID}}" class="btn btn-large topic-tag">edit &raquo;</a>
+
+            <button type="button" class="btn btn-large topic-tag" onclick="location.href='{% url 'addContainerTo' project_pk=project.ID parent_pk=child.ID %}'">
                 add &raquo;
             </button>
-            <a href="/addContainer" class="btn btn-large"> view &raquo;</a>
+            <a href="/addContainer" class="btn btn-large topic-tag"> view &raquo;</a>
 
         </h5>
         {% if sub_tree %}

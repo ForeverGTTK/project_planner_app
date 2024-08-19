@@ -7,15 +7,15 @@
     }
 </style>
 <h2>
-    Create new project<br />
+    change project sorting<br />
     <br>
-    <button type="button" class="btn btn-secondary " onclick="location.href='{% url 'addProject' %}'">
-        Click Here!
-    </button>
+    <a class="btn btn-primary topic-tag" onclick="href='Topic'">Topics </a>
+    <a href="/exploreProjects/owner_ID" class="btn btn-primary topic-tag">Owners</a>
+
 </h2>
 
 <h2>
-    Existing Topics<br />
+    watch other Topics<br />
 </h2>
 
 <br>
@@ -27,31 +27,37 @@
 
 {% endblock %}
 {% block content %}
+<p>sorted by: {{sorted_by}}</p>
 
-
-    {% for project in projects_list %}
-
+    {% for headline,headline_items in sorted_projects.items %}
+<h3>{{ headline }}</h3>
 <div class="jumbotron">
+
+
+    {% for project in headline_items %}
+
     <h5>
         <strong>{{ project.name|safe }} </strong>
         {{project.description|safe}}
         <a class="btn topic-tag" href="{% url 'userPage' userName=project.owner_ID %}" style="font-size:65%"> &copy; {{ project.created_by }}</a>
-        <a href="/updateProject/{{project.ID}} " class="btn topic-tag"style="font-size:65%"> edit &raquo;</a>
+        <a href="/updateProject/{{project.ID}} " class="btn topic-tag" style="font-size:65%"> edit &raquo;</a>
     </h5>
     <ul>
         <li> created at {{project.created_at}} </li>
         <li> last updated {{project.last_updated}} </li>
     </ul>
-    <a href="/editor/{{project.ID}}" class="btn btn-primary btn-large">edit project &raquo;</a>
     <a href="/projectView/{{project.ID}}" class="btn btn-primary btn-large">view project &raquo;</a>
+    <hr />
 
+    {% endfor %}
 </div>
+
     {% endfor %}
 
 <div class="jumbotron">
     <h3>
-        Create A New Project
-        <button type="button" class="btn btn-secondary " onclick="location.href='{% url 'addProject' %}'">
+        Watch Your Projects
+        <button type="button" class="btn btn-large " onclick="location.href='{% url 'myProjects' %}'">
             Click Here!
         </button>
     </h3>

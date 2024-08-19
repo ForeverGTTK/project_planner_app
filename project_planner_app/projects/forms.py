@@ -23,6 +23,12 @@ class newProjectForm(forms.ModelForm):
         model = Projects
         fields =['name','description','is_public']
 
+class existingProjectForm(forms.ModelForm):
+    class Meta:
+        model = Projects
+        fields =['owner_ID','name','description','is_public']
+
+        
 class DataContainerForm(forms.ModelForm):
     class Meta:
         model = data_container

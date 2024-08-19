@@ -1,0 +1,37 @@
+{% extends "projects/layout.html" %}
+
+{% block content %}
+<table>
+    <tr>
+        <td>
+            <h2>{{ title }}.</h2>
+        </td>
+        <td>
+        </td>
+    </tr>
+
+
+
+
+    {% for msg,content in message.items %}
+    <tr>
+        <td>
+            <h4>{{ msg }}:</h4>
+        </td>
+        <td>
+            {% if msg == 'owned projects'%}
+
+            {% for project in content %}
+            <a class="btn topic-tag " href="/projectView/{{project.ID}}"> {{project}}</a>
+            <br />
+            {% endfor %}
+
+            {% else %}
+            {{ content }}
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+    {% endblock %}
